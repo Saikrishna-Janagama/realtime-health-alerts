@@ -2,9 +2,10 @@ import streamlit as st
 import os
 from groq import Groq
 from dotenv import load_dotenv
-import pyttsx3
-import json
 from datetime import datetime
+
+# Streamlit page configuration
+st.set_page_config(page_title="Real-Time Health Watch", page_icon="⚕️", layout="wide")
 
 # Load environment variables
 load_dotenv()
@@ -13,13 +14,6 @@ if not groq_api_key:
     st.error("GROQ_API_KEY not found in .env file. Please add it and restart the app.")
     st.stop()
 client = Groq(api_key=groq_api_key)
-
-# Initialize text-to-speech engine
-engine = None
-try:
-    engine = pyttsx3.init()
-except Exception as e:
-    st.warning(f"Text-to-speech initialization failed: {str(e)}. Voice output will be disabled.")
 
 # Enhanced Mock Health Alerts with more variety and Telangana focus
 mock_health_alerts = {
@@ -106,9 +100,6 @@ def process_alert_with_grok(alert_type, details, region):
     advice = safe_groq_call([{"role": "user", "content": advice_prompt}])
 
     return explanation, advice
-
-# Streamlit UI Enhancements
-st.set_page_config(page_title="Real-Time Health Watch", page_icon="⚕️", layout="wide")
 
 # Custom CSS for a more engaging look
 st.markdown(
@@ -202,23 +193,16 @@ with st.container():
                     st.markdown("<h4 style='color:#28a745;'>Precautionary Advice</h4>", unsafe_allow_html=True)
                     st.markdown(f"<div class='advice-box'>{advice}</div>", unsafe_allow_html=True)
 
-                    # Voice output
-                    if engine:
-                        try:
-                            engine.say(f"Health Alert for {region}: {alert_data['alert_type']}. Explanation: {explanation}. Advice: {advice}")
-                            engine.runAndWait()
-                        except Exception as e:
-                            st.warning("Text-to-speech failed for this alert.")
                     st.markdown("---")
         else:
             st.info(f"No current health alerts found for {region}.")
 
 st.markdown("<hr>", unsafe_allow_html=True)
 st.markdown("<p class='note'>**Note:** This application uses mock data for demonstration purposes. For real-time and comprehensive health alerts, integration with official health APIs (e.g., WHO, NCDC India) would be necessary.</p>", unsafe_allow_html=True)
+st.markdown("<p class='note'>**Voice Output:** A text-to-speech feature is available locally but disabled in this cloud deployment due to environment limitations.</p>", unsafe_allow_html=True)
 st.markdown("<p class='note'>Developed with Streamlit and Groq's LLaMA 3.</p>", unsafe_allow_html=True)
 
 # --- Unique Extra Features ---
-
 st.sidebar.title("⚙️ Additional Features")
 
 # Severity Filter
@@ -258,7 +242,7 @@ if st.sidebar.checkbox("Show Filtered Alerts"):
     else:
         st.info(f"No filtered alerts found for {region} based on your criteria.")
 
-# Alert History (Simple - could be expanded with more sophisticated storage)
+# Alert History
 if 'alert_history' not in st.session_state:
     st.session_state['alert_history'] = []
 
@@ -280,8 +264,7 @@ if st.sidebar.checkbox("Show Alert History"):
     if st.session_state['alert_history']:
         for log in reversed(st.session_state['alert_history']):
             st.sidebar.write(f"**{log['type']}** ({log['region']}) - {log['timestamp']}")
-            st.sidebar.write(f"*Details*: {log['details'][:50]}...") # Show a snippet
+            st.sidebar.write(f"*Details*: {log['details'][:50]}...")
             st.sidebar.markdown("---")
     else:
         st.sidebar.info("No alerts in history yet.")
-    

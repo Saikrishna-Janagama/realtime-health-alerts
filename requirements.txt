@@ -1,6 +1,5 @@
-#install Dependencies
+#Install Depemdencies
 
 streamlit
 groq
 python-dotenv
-pyttsx3
