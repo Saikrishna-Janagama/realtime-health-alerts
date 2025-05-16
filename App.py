@@ -6,6 +6,11 @@ import pyttsx3
 import json
 from datetime import datetime
 
+
+
+st.set_page_config(page_title="Real-Time Health Watch", page_icon="⚕️", layout="wide")
+
+
 # Load environment variables
 load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
