@@ -1,5 +1,7 @@
+<<<<<<< HEAD
 #Install Depemdencies
 
 streamlit
 groq
 python-dotenv
+

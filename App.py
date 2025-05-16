@@ -4,9 +4,17 @@ from groq import Groq
 from dotenv import load_dotenv
 from datetime import datetime
 
+<<<<<<< HEAD
 # Streamlit page configuration
 st.set_page_config(page_title="Real-Time Health Watch", page_icon="⚕️", layout="wide")
 
+=======
+
+
+st.set_page_config(page_title="Real-Time Health Watch", page_icon="⚕️", layout="wide")
+
+
+>>>>>>> 9d4b3aecabc42e9d12e919673dbb584db378aa4d
 # Load environment variables
 load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
