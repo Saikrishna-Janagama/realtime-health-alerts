@@ -1,0 +1,6 @@
+#install Dependencies
+
+streamlit
+groq
+python-dotenv
+pyttsx3
